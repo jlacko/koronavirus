@@ -20,7 +20,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   scale_x_date(date_breaks = "1 day",
                minor_breaks = NULL,
                labels = scales::date_format(format = "%d.%m."),
-               limits = as.Date(c("2020-03-02", "2020-04-10")) ) +
+               limits = as.Date(c("2020-03-02", "2020-03-30")) ) +
   scale_y_log10(labels = scales::number_format()) +
   theme_linedraw() +
   theme(axis.text.x = element_text(angle = 90),
