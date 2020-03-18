@@ -1,4 +1,4 @@
-# Korunavirus
+# Koronavirus
 
 Grafické zobrazení vývoje nového ḱoronaviru COVID-19, ze zvláštním zřetelem na Českou republiku.
 
@@ -9,3 +9,5 @@ Aktualizace je dočasně nastavená na ruční zkopírování dat z repa do repa
 <p align="center">
   <img src="obrazek.png" alt="trendline"/>
 </p>
+
+Aktuální trend se dost blíží ideální exponenciále, s vyhlídkou 10 tisíc případů před koncem března.
