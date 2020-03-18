@@ -11,3 +11,10 @@ Aktualizace je dočasně nastavená na ruční zkopírování dat z repa do repa
 </p>
 
 Aktuální trend se dost blíží ideální exponenciále, s vyhlídkou 10 tisíc případů před koncem března.
+
+Pro srovnání trend čtyř zemí ve světě; je vidět jak se exponenciálu podařilo zastavit v Číně a Koreji, zpomalit v Japonsku ale v Itálii stále drží trend.
+
+<p align="center">
+  <img src="cizina.png" alt="trendline"/>
+</p>
+
