@@ -3,30 +3,39 @@
 library(tidyverse)
 
 clean_data <- read_csv2("./data/raw_data.csv") %>% 
-  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South") & pocet > 0) %>% 
+  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia") & pocet > 0) %>% 
+  mutate(zeme = fct_relevel(as.factor(zeme), "Czechia")) %>% 
   group_by(zeme, datum) %>% 
   summarise(pocet = sum(pocet)) %>% 
-  filter(pocet > 10) # před deseti nemocnými je to hodně volatilní...
+  filter(pocet > 10) %>%  # před deseti nemocnými je to hodně volatilní...
+  group_by(zeme) %>% 
+  arrange(datum) %>% 
+  mutate(den = row_number())
+  
 
-ggplot(data = clean_data, aes(x = datum, y = pocet, color = zeme)) +
+ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme)) +
   geom_line(lwd = 1.2) +
-  geom_text(data = slice(clean_data, which.max(datum)), 
-            aes(x = datum, y = pocet, label = pocet),
+  geom_text(data = slice(clean_data, which.max(den)), 
+            aes(x = den, y = pocet, label = pocet),
             hjust = -.5, show.legend = F) +
-  labs(title = "Trend šíření nákazy COVID-19 ve světě",
+  labs(title = "Trend šíření nákazy COVID-19 u nás a ve světě",
        color = "Počet nakažených koronavirem: ",
+       x = "Dní od zjištění nákazy",
+       y = "Počet nakažených (log scale)",
        caption = paste("zdroj dat: John Hopkins, stav k", max(clean_data$datum) %>% 
                          format(format = "%d.%m.%Y"))) +
-  scale_x_date(date_breaks = "1 day",
-               minor_breaks = NULL,
-               labels = scales::date_format(format = "%d.%m."),
-               limits = c(as.Date("2020-01-20"), max(clean_data$datum)+2)) +
+  scale_x_continuous(limits = c(1, max(clean_data$den)+2)) +
   scale_y_log10(labels = scales::number_format()) +
-  scale_color_viridis_d(guide = guide_legend(title.position = "top",
-                                             title.hjust = 0.5)) +
+  scale_color_manual(values = c("Czechia" = "red",
+                                "China" = "gray45",
+                                "Italy" = "springgreen4",
+                                "Japan" = "slategray",
+                                "Korea, South" = "coral"),
+                     guide = guide_legend(title.position = "top",
+                                          title.hjust = 0.5)) +
   theme_linedraw() +
   theme(axis.text.x = element_text(angle = 90),
-        axis.title=element_blank(),
+        axis.title.y =element_blank(),
         panel.grid.major = element_line(color = "gray75"),
         plot.caption = element_text(color = "gray25"),
         legend.position="bottom")
