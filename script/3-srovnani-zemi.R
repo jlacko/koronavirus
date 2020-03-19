@@ -7,13 +7,13 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
   mutate(zeme = fct_relevel(as.factor(zeme), "Czechia")) %>% 
   group_by(zeme, datum) %>% 
   summarise(pocet = sum(pocet)) %>% 
-  filter(pocet > 10) %>%  # před deseti nemocnými je to hodně volatilní...
+  filter(pocet > 5) %>%  # před pěti nemocnými je to hodně volatilní...
   group_by(zeme) %>% 
   arrange(datum) %>% 
   mutate(den = row_number())
   
 
-ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme)) +
+ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
   geom_line(lwd = 1.2) +
   geom_text(data = slice(clean_data, which.max(den)), 
             aes(x = den, y = pocet, label = pocet),
@@ -26,13 +26,19 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme)) +
                          format(format = "%d.%m.%Y"))) +
   scale_x_continuous(limits = c(1, max(clean_data$den)+2)) +
   scale_y_log10(labels = scales::number_format()) +
-  scale_color_manual(values = c("Czechia" = "red",
+  scale_color_manual(values = c("Czechia" = "firebrick",
                                 "China" = "gray45",
                                 "Italy" = "springgreen4",
                                 "Japan" = "slategray",
                                 "Korea, South" = "coral"),
                      guide = guide_legend(title.position = "top",
                                           title.hjust = 0.5)) +
+  scale_alpha_manual(values = c("Czechia" = 1,
+                                "China" = .7,
+                                "Italy" = .7,
+                                "Japan" = .7,
+                                "Korea, South" = .7),
+                     guide = guide_none()) + 
   theme_linedraw() +
   theme(axis.text.x = element_text(angle = 90),
         axis.title.y =element_blank(),

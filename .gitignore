@@ -37,3 +37,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# podkladová data - stahují se čerstvá ve skriptu 1-digest-data.R
+*.csv
