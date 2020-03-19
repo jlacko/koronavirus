@@ -3,8 +3,8 @@
 library(tidyverse)
 
 clean_data <- read_csv2("./data/raw_data.csv") %>% 
-  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia", "United Kingdom") & pocet > 0) %>% 
-  mutate(zeme = fct_relevel(as.factor(zeme), "Czechia")) %>% 
+  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia", "United Kingdom", "Slovakia") & pocet > 0) %>% 
+  mutate(zeme = fct_relevel(as.factor(zeme), c("Czechia", "Slovakia"))) %>% 
   group_by(zeme, datum) %>% 
   summarise(pocet = sum(pocet)) %>% 
   filter(pocet > 5) %>%  # před pěti nemocnými je to hodně volatilní...
@@ -27,6 +27,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
   scale_x_continuous(limits = c(1, max(clean_data$den)+2)) +
   scale_y_log10(labels = scales::number_format()) +
   scale_color_manual(values = c("Czechia" = "firebrick",
+                                "Slovakia" = "goldenrod2",
                                 "China" = "gray45",
                                 "Italy" = "springgreen4",
                                 "Japan" = "slategray",
@@ -36,6 +37,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                           title.hjust = 0.5,
                                           override.aes = list(size = 2))) +
   scale_alpha_manual(values = c("Czechia" = 1,
+                                "Slovakia" = 1,
                                 "China" = .6,
                                 "Italy" = .6,
                                 "Japan" = .6,
@@ -43,6 +45,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                 "United Kingdom" = .6),
                      guide = guide_none()) + 
   scale_size_manual(values = c("Czechia" = 1.5,
+                               "Slovakia" = 1.5,
                                "China" = .8,
                                "Italy" = .8,
                                "Japan" = .8,
