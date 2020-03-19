@@ -3,7 +3,7 @@
 library(tidyverse)
 
 clean_data <- read_csv2("./data/raw_data.csv") %>% 
-  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia") & pocet > 0) %>% 
+  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia", "United Kingdom") & pocet > 0) %>% 
   mutate(zeme = fct_relevel(as.factor(zeme), "Czechia")) %>% 
   group_by(zeme, datum) %>% 
   summarise(pocet = sum(pocet)) %>% 
@@ -14,13 +14,13 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
   
 
 ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
-  geom_line(lwd = 1.2) +
+  geom_line(aes(size = zeme)) +
   geom_text(data = slice(clean_data, which.max(den)), 
             aes(x = den, y = pocet, label = pocet),
             hjust = -.5, show.legend = F) +
   labs(title = "Trend šíření nákazy COVID-19 u nás a ve světě",
-       color = "Počet nakažených koronavirem: ",
-       x = "Dní od zjištění nákazy",
+       color = "Počet potvrzených případů v zemi: ",
+       x = "Dní od počátku vykazování",
        y = "Počet nakažených (log scale)",
        caption = paste("zdroj dat: John Hopkins, stav k", max(clean_data$datum) %>% 
                          format(format = "%d.%m.%Y"))) +
@@ -30,14 +30,24 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                 "China" = "gray45",
                                 "Italy" = "springgreen4",
                                 "Japan" = "slategray",
-                                "Korea, South" = "coral"),
+                                "Korea, South" = "coral",
+                                "United Kingdom" = "red"),
                      guide = guide_legend(title.position = "top",
-                                          title.hjust = 0.5)) +
+                                          title.hjust = 0.5,
+                                          override.aes = list(size = 2))) +
   scale_alpha_manual(values = c("Czechia" = 1,
-                                "China" = .7,
-                                "Italy" = .7,
-                                "Japan" = .7,
-                                "Korea, South" = .7),
+                                "China" = .6,
+                                "Italy" = .6,
+                                "Japan" = .6,
+                                "Korea, South" = .6,
+                                "United Kingdom" = .6),
+                     guide = guide_none()) + 
+  scale_size_manual(values = c("Czechia" = 1.5,
+                               "China" = .8,
+                               "Italy" = .8,
+                               "Japan" = .8,
+                               "Korea, South" = .8,
+                               "United Kingdom" = .8),
                      guide = guide_none()) + 
   theme_linedraw() +
   theme(axis.text.x = element_text(angle = 90),
