@@ -3,7 +3,7 @@
 library(tidyverse)
 
 clean_data <- read_csv2("./data/raw_data.csv") %>% 
-  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia", "United Kingdom", "Slovakia") & pocet > 0) %>% 
+  filter(zeme %in% c("China", "Italy", "Japan", "Korea, South", "Czechia", "United Kingdom", "Slovakia", "Germany") & pocet > 0) %>% 
   mutate(zeme = fct_relevel(as.factor(zeme), c("Czechia", "Slovakia"))) %>% 
   group_by(zeme, datum) %>% 
   summarise(pocet = sum(pocet)) %>% 
@@ -30,9 +30,10 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                 "Slovakia" = "goldenrod2",
                                 "China" = "gray45",
                                 "Italy" = "springgreen4",
-                                "Japan" = "slategray",
+                                "Japan" = "cornflowerblue",
                                 "Korea, South" = "coral",
-                                "United Kingdom" = "red"),
+                                "United Kingdom" = "red",
+                                "Germany" = "black"),
                      guide = guide_legend(title.position = "top",
                                           title.hjust = 0.5,
                                           override.aes = list(size = 2))) +
@@ -42,7 +43,8 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                 "Italy" = .6,
                                 "Japan" = .6,
                                 "Korea, South" = .6,
-                                "United Kingdom" = .6),
+                                "United Kingdom" = .6,
+                                "Germany" = .6),
                      guide = guide_none()) + 
   scale_size_manual(values = c("Czechia" = 1.5,
                                "Slovakia" = 1.5,
@@ -50,7 +52,8 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
                                "Italy" = .8,
                                "Japan" = .8,
                                "Korea, South" = .8,
-                               "United Kingdom" = .8),
+                               "United Kingdom" = .8,
+                               "Germany" = .8),
                      guide = guide_none()) + 
   theme_linedraw() +
   theme(axis.text.x = element_text(angle = 90),
