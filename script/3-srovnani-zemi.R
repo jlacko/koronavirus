@@ -59,4 +59,4 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
         plot.caption = element_text(color = "gray25"),
         legend.position="bottom")
 
-ggsave("cizina.png", dpi = 300, units = "cm", width = 25, height = 16)
+ggsave("./img/cizina.png", dpi = 300, units = "cm", width = 25, height = 16)

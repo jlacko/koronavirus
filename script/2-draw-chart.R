@@ -28,5 +28,5 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
         panel.grid.major = element_line(color = "gray75"),
         plot.caption = element_text(color = "gray25"))
   
-ggsave("obrazek.pdf", dpi = 300, units = "cm", width = 25, height = 16)
-ggsave("obrazek.png", dpi = 300, units = "cm", width = 25, height = 16)
+ggsave("./img/obrazek.pdf", dpi = 300, units = "cm", width = 25, height = 16)
+ggsave("./img/obrazek.png", dpi = 300, units = "cm", width = 25, height = 16)
