@@ -5,12 +5,32 @@ library(tidyverse)
 pdf.options(encoding = "ISOLatin2") # aby nepadal pandoc na konverzi češtiny v nadpisech grafů
 
 clean_data <- read_csv2("./data/raw_data.csv") %>%
-  filter(zeme == "Czechia" & pocet > 0)
+  filter(zeme == "Czechia" & pocet > 0) %>%
+  mutate(den = lubridate::day(datum))
 
+trend <- nls(pocet ~ a * (1 + r)^(den),
+  data = subset(clean_data, den < 21),
+  start = list(a = 1, r = .01)
+)
+
+budoucnost <- data.frame(den = 21:31)
+
+predpoved <- data.frame(
+  datum = c(as.Date("2020-03-21"):as.Date("2020-03-31")) %>% as.Date(origin = as.Date("1970-01-01")),
+  pocet = predict(trend, newdata = budoucnost)
+)
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
-  geom_smooth(method = "lm", se = F, lwd = .5, fullrange = T, color = "gray75") +
+  geom_smooth(method = "lm", se = F, lwd = .5, fullrange = T, color = "gray80") +
   geom_line(color = "firebrick", lwd = 1.2) +
+  geom_text(
+    data = predpoved, aes(
+      x = datum, y = pocet,
+      label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
+    ),
+    hjust = 2,
+    color = "gray50"
+  ) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
     label = pocet
