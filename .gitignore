@@ -42,5 +42,7 @@ vignettes/*.pdf
 *.csv
 
 # orchestrace na serveru
-/script/9-orchestrator.T
+/script/9-orchestrator.R
+9-orchestrator.R
+9-orchestrator.log
 sync.sh
