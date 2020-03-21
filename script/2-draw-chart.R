@@ -21,16 +21,18 @@ predpoved <- data.frame(
 )
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
-  geom_smooth(method = "lm", se = F, lwd = .5, fullrange = T, color = "gray80") +
+#  geom_smooth(method = "lm", se = F, lwd = .5, fullrange = T, color = "gray80") +
   geom_line(color = "firebrick", lwd = 1.2) +
   geom_text(
     data = predpoved, aes(
       x = datum, y = pocet,
       label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
     ),
-    hjust = 2,
+    hjust = 1.2,
     color = "gray50"
   ) +
+  geom_point(data = predpoved, aes(
+    x = datum, y = pocet))+
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
     label = pocet
