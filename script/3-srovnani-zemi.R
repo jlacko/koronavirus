@@ -31,7 +31,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
     caption = paste("zdroj dat: Johns Hopkins, stav k", max(clean_data$datum) %>%
       format(format = "%d.%m.%Y"))
   ) +
-  scale_x_continuous(limits = c(1, max(clean_data$den) + 2)) +
+  scale_x_continuous(limits = c(1, max(clean_data$den) + 3)) +
   scale_y_log10(labels = scales::number_format()) +
   scale_color_manual(
     values = c(
