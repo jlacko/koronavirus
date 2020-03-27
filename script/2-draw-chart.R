@@ -34,7 +34,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     x = datum, y = pocet), pch = 4) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
-    label = pocet
+    label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
   ), hjust = -.5, color = "firebrick") +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
