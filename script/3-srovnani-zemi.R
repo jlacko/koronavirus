@@ -20,8 +20,8 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
   geom_line(aes(size = zeme)) +
   geom_text(
     data = slice(clean_data, which.max(den)),
-    aes(x = den, y = pocet, label = pocet),
-    hjust = -.5, show.legend = F
+    aes(x = den, y = pocet, label = formatC(pocet, big.mark = " ", format = "f", digits = 0)),
+    hjust = -.25, show.legend = F
   ) +
   labs(
     title = "Trend šíření nákazy COVID-19 u nás a ve světě",
@@ -91,4 +91,4 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
     legend.position = "bottom"
   )
 
-ggsave("./img/cizina.png", dpi = 300, units = "cm", width = 25, height = 16)
+ggsave("./img/cizina.png", dpi = 300, units = "cm", width = 25, height = 20)
