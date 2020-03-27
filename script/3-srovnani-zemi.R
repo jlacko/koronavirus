@@ -5,7 +5,7 @@ library(tidyverse)
 clean_data <- read_csv2("./data/raw_data.csv") %>%
   filter(zeme %in% c(
     "China", "Italy", "Japan", "Korea, South", "Czechia",
-    "United Kingdom", "Slovakia", "Germany"
+    "United Kingdom", "Slovakia", "Germany", "Spain", "US"
   ) & pocet > 0) %>%
   mutate(zeme = fct_relevel(as.factor(zeme), c("Czechia", "Slovakia"))) %>%
   group_by(zeme, datum) %>%
@@ -42,7 +42,9 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
       "Japan" = "cornflowerblue",
       "Korea, South" = "coral",
       "United Kingdom" = "red",
-      "Germany" = "black"
+      "Germany" = "black",
+      "US" = "yellowgreen",
+      "Spain" = "yellow"
     ),
     guide = guide_legend(
       title.position = "top",
@@ -59,7 +61,9 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
       "Japan" = .6,
       "Korea, South" = .6,
       "United Kingdom" = .6,
-      "Germany" = .6
+      "Germany" = .6,
+      "Spain" = .6,
+      "US" = .6
     ),
     guide = guide_none()
   ) +
@@ -72,7 +76,9 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
       "Japan" = .8,
       "Korea, South" = .8,
       "United Kingdom" = .8,
-      "Germany" = .8
+      "Germany" = .8,
+      "Spain" = .8,
+      "US" = .8
     ),
     guide = guide_none()
   ) +
