@@ -68,5 +68,5 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   )
 
 
-ggsave("./img/obrazek.pdf", dpi = 300, units = "cm", width = 25, height = 16)
-ggsave("./img/obrazek.png", dpi = 300, units = "cm", width = 25, height = 16)
+ggsave("./img/obrazek.pdf", dpi = 300, units = "cm", width = 25, height = 20)
+ggsave("./img/obrazek.png", dpi = 300, units = "cm", width = 25, height = 20)
