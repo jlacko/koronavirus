@@ -65,7 +65,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
     color = "Počet nakažených",
-    caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz/, stav k", max(clean_data$datum) %>%
+    caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz, stav k", max(clean_data$datum) %>%
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_date(
