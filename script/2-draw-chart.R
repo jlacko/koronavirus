@@ -29,12 +29,15 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     hjust = 1.2,
     color = "gray50"
   ) +
-  geom_smooth(data = filter(clean_data, datum >= as.Date("2020-03-21")),
-              aes(color = "gray75"),
-              method = "lm", size = .5, fullrange = T, se = F, linetype = "dashed") +
+  geom_smooth(
+    data = filter(clean_data, datum >= as.Date("2020-03-21")),
+    aes(color = "gray75"),
+    method = "lm", size = .5, fullrange = T, se = F, linetype = "dashed"
+  ) +
   geom_line(aes(color = "firebrick"), lwd = 1.2) +
   geom_point(data = predpoved, aes(
-    x = datum, y = pocet), pch = 4) +
+    x = datum, y = pocet
+  ), pch = 4) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
     label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
@@ -42,7 +45,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
     color = "Počet nakažených",
-    caption = paste("zdroj dat: Johns Hopkins, stav k", max(clean_data$datum) %>%
+    caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz/, stav k", max(clean_data$datum) %>%
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_date(
@@ -56,8 +59,9 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     labels = c("skutečnost", "trend od 20.3.2020"),
     guide = guide_legend(
       title.position = "top",
-      title.hjust = 0.5)
-    ) +
+      title.hjust = 0.5
+    )
+  ) +
   theme_linedraw() +
   theme(
     axis.text.x = element_text(angle = 90),

@@ -28,7 +28,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
     color = "Počet potvrzených případů v zemi: ",
     x = "Dní od počátku vykazování",
     y = "Počet nakažených (log scale)",
-    caption = paste("zdroj dat: Johns Hopkins, stav k", max(clean_data$datum) %>%
+    caption = paste("zdroj dat: MZČR & Johns Hopkins, stav k", max(clean_data$datum) %>%
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_continuous(limits = c(1, max(clean_data$den) + 3)) +
