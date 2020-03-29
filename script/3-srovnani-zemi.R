@@ -44,7 +44,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
       "United Kingdom" = "red",
       "Germany" = "black",
       "US" = "yellowgreen",
-      "Spain" = "yellow"
+      "Spain" = "darkorchid"
     ),
     guide = guide_legend(
       title.position = "top",
