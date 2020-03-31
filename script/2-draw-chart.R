@@ -6,7 +6,7 @@ pdf.options(encoding = "ISOLatin2") # aby nepadal pandoc na konverzi češtiny v
 
 clean_data <- read_csv2("./data/raw_data.csv") %>%
   filter(zeme == "Czechia" & pocet > 0) %>%
-  mutate(den = lubridate::day(datum))
+  mutate(den = row_number())
 
 
 # stará trend line - do 20. 3. včetně
@@ -19,10 +19,10 @@ old_trend <- nls(pocet ~ a * (1 + r)^(den),
 double_old <- log(2) / log(1 + coef(old_trend)[["r"]])
 
 # predikce budoucnosti podle starého trendu
-budoucnost <- data.frame(den = 21:31)
+budoucnost <- data.frame(den = seq(from = 21, length.out = 11))
 
 predpoved <- data.frame(
-  datum = c(as.Date("2020-03-21"):as.Date("2020-03-31")) %>% as.Date(origin = as.Date("1970-01-01")),
+  datum = seq(from = as.Date("2020-03-21"), by = 1, length.out = 11),
   pocet = predict(old_trend, newdata = budoucnost)
 )
 
@@ -55,13 +55,13 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_line(aes(color = "firebrick"), lwd = 1.2) +
   geom_point(data = predpoved, aes(
     x = datum, y = pocet
-  ), pch = 4) +
+  ), pch = 4, show.legend = F) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
     label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
   ), hjust = -.5, color = "firebrick") +
-  annotate("text", label = popisek_old, x = as.Date("2020-03-12"), y = 7, hjust = 0) +
-  annotate("text", label = popisek_new, x = as.Date("2020-03-12"), y = 4.5, hjust = 0) +
+  annotate("text", label = popisek_old, x = as.Date("2020-03-20"), y = 7, hjust = 0) +
+  annotate("text", label = popisek_new, x = as.Date("2020-03-20"), y = 4.5, hjust = 0) +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
     color = "Počet nakažených",
@@ -69,10 +69,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_date(
-    date_breaks = "1 day",
+    breaks = seq(from = as.Date("2020-03-01"), by = 1, to = as.Date("2020-04-15")),
     minor_breaks = NULL,
     labels = scales::date_format(format = "%d.%m."),
-    limits = as.Date(c("2020-03-02", "2020-03-30"))
+    limits = as.Date(c("2020-03-02", "2020-04-14"))
   ) +
   scale_y_log10(labels = scales::number_format()) +
   scale_color_identity(
