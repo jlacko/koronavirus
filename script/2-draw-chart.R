@@ -9,7 +9,7 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
 
 # stará trend line - do 20. 3. včetně
 old_trend <- nls(pocet ~ a * (1 + r)^(den),
-  data = subset(clean_data, den <= 20),
+  data = subset(clean_data, den < 20),
   start = list(a = 1, r = .01)
 )
 
@@ -18,7 +18,7 @@ double_old <- log(2) / log(1 + coef(old_trend)[["r"]])
 
 # nová trend line - od 21. 3. do konce března
 new_trend <- nls(pocet ~ a * (1 + r)^(den),
-  data = subset(clean_data, den > 20 & den <= 31) %>% mutate(den = den - 19),
+  data = subset(clean_data, den >= 20 & den <= 31) %>% mutate(den = den - 19),
   start = list(a = 1, r = .01)
 )
 
@@ -40,7 +40,7 @@ popisek_newest <- paste("Trend po 1. dubnu – zdvojnásobení počtu nakažený
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_smooth(
-    data = filter(clean_data, datum >= as.Date("2020-03-21") & datum < as.Date("2020-03-31")),
+    data = filter(clean_data, datum >= as.Date("2020-03-20") & datum < as.Date("2020-04-01")),
     aes(color = "gray75"),
     method = "lm", size = .5, fullrange = T, se = F, linetype = "dashed"
   ) +
@@ -54,9 +54,9 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     x = datum, y = pocet,
     label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
   ), hjust = -.5, color = "firebrick") +
-  annotate("text", label = popisek_old, x = as.Date("2020-03-14"), y = 8, hjust = 0) +
-  annotate("text", label = popisek_new, x = as.Date("2020-03-14"), y = 5.5, hjust = 0) +
-  annotate("text", label = popisek_newest, x = as.Date("2020-03-14"), y = 3.75, hjust = 0) +
+  annotate("text", label = popisek_old, x = as.Date("2020-03-12"), y = 8, hjust = 0) +
+  annotate("text", label = popisek_new, x = as.Date("2020-03-12"), y = 5.5, hjust = 0) +
+  annotate("text", label = popisek_newest, x = as.Date("2020-03-12"), y = 3.75, hjust = 0) +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
     color = "Počet nakažených",
