@@ -40,14 +40,19 @@ popisek_newest <- paste("Trend po 1. dubnu – zdvojnásobení počtu nakažený
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_smooth(
-    data = filter(clean_data, datum >= as.Date("2020-03-20") & datum < as.Date("2020-04-01")),
+    data = filter(clean_data, datum < as.Date("2020-03-20")),
     aes(color = "gray75"),
     method = "lm", size = .5, fullrange = T, se = F, linetype = "dashed"
   ) +
   geom_smooth(
-    data = filter(clean_data, datum >= as.Date("2020-04-01")),
+    data = filter(clean_data, datum >= as.Date("2020-03-20") & datum < as.Date("2020-04-01")),
     aes(color = "gray75"),
     method = "lm", size = .5, fullrange = T, se = F, linetype = "dotdash"
+  ) +
+  geom_smooth(
+    data = filter(clean_data, datum >= as.Date("2020-04-01")),
+    aes(color = "gray75"),
+    method = "lm", size = .5, fullrange = T, se = F, linetype = "dotted"
   ) +
   geom_line(aes(color = "firebrick"), lwd = 1.2) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
@@ -69,9 +74,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     labels = scales::date_format(format = "%d.%m."),
     limits = as.Date(c("2020-03-02", "2020-04-14"))
   ) +
-  scale_y_log10(labels = scales::number_format()) +
+  scale_y_log10(labels = scales::number_format(accuracy = 1),
+                limits = c(1, 20000)) +
   scale_color_identity(
-    labels = c("skutečnost", "trend po 20.3.2020"),
+    labels = c("skutečnost", "zobecnění trendu"),
     guide = guide_legend(
       title.position = "top",
       title.hjust = 0.5
