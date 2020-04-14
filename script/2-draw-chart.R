@@ -69,10 +69,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_date(
-    breaks = seq(from = as.Date("2020-03-01"), by = 1, to = as.Date("2020-04-15")),
+    breaks = seq(from = as.Date("2020-03-01"), by = 1, to = as.Date("2020-04-21")),
     minor_breaks = NULL,
     labels = scales::date_format(format = "%d.%m."),
-    limits = as.Date(c("2020-03-02", "2020-04-14"))
+    limits = as.Date(c("2020-03-02", "2020-04-20"))
   ) +
   scale_y_log10(labels = scales::number_format(accuracy = 1),
                 limits = c(1, 20000)) +
