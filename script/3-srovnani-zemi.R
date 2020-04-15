@@ -26,7 +26,7 @@ ggplot(data = clean_data, aes(x = den, y = pocet, color = zeme, alpha = zeme)) +
   labs(
     title = "Trend šíření nákazy COVID-19 u nás a ve světě",
     color = "Počet potvrzených případů v zemi: ",
-    x = "Dní od počátku vykazování",
+    x = "Dní od padesátého nakaženého",
     y = "Počet nakažených (log scale)",
     caption = paste("zdroj dat: MZČR & Johns Hopkins, stav k", max(clean_data$datum) %>%
       format(format = "%d.%m.%Y"))
