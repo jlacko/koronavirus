@@ -10,7 +10,7 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
   mutate(zeme = fct_relevel(as.factor(zeme), c("Czechia", "Slovakia"))) %>%
   group_by(zeme, datum) %>%
   summarise(pocet = sum(pocet)) %>%
-  filter(pocet > 5) %>% # před pěti nemocnými je to hodně volatilní...
+  filter(pocet > 50) %>% # před 50 nemocnými je to hodně volatilní...
   group_by(zeme) %>%
   arrange(datum) %>%
   mutate(den = row_number())
