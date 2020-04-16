@@ -8,35 +8,47 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
 
 
 # stará trend line - do 20. 3. včetně
-old_trend <- nls(pocet ~ a * (1 + r)^(den),
+march_12<- nls(pocet ~ a * (1 + r)^(den),
   data = subset(clean_data, den < 20),
   start = list(a = 1, r = .01)
 )
 
 # čas ve dnech pro zdvojnásobení počtu nakažených; starý trend
-double_old <- log(2) / log(1 + coef(old_trend)[["r"]])
+double_march_12 <- log(2) / log(1 + coef(march_12)[["r"]])
 
 # nová trend line - od 21. 3. do konce března
-new_trend <- nls(pocet ~ a * (1 + r)^(den),
-  data = subset(clean_data, den >= 20 & den <= 31) %>% mutate(den = den - 19),
+march_3 <- nls(pocet ~ a * (1 + r)^(den),
+  data = subset(clean_data, den >= 20 & den < 32) %>% mutate(den = den - 19),
   start = list(a = 1, r = .01)
 )
 
 # čas ve dnech pro zdvojnásobení počtu nakažených; nový trend
-double_new <- log(2) / log(1 + coef(new_trend)[["r"]])
+double_march_3 <- log(2) / log(1 + coef(march_3)[["r"]])
 
-# nová trend line - od 1. dubna
-newest_trend <- nls(pocet ~ a * (1 + r)^(den),
-                 data = subset(clean_data, den > 31) %>% mutate(den = den - 31),
-                 start = list(a = 1, r = .01)
+# nová trend line - od 21. 3. do konce března
+april_1 <- nls(pocet ~ a * (1 + r)^(den),
+               data = subset(clean_data, den >= 32 & den < 42) %>% mutate(den = den - 31),
+               start = list(a = 1, r = .01)
 )
 
 # čas ve dnech pro zdvojnásobení počtu nakažených; nový trend
-double_newest <- log(2) / log(1 + coef(newest_trend)[["r"]])
+double_april_1 <- log(2) / log(1 + coef(april_1)[["r"]])
 
-popisek_old <- paste("Trend prvních dvou dekád března – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_old, 2), "\\.", ","), "dní")
-popisek_new <- paste("Trend poslední březnové dekády – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_new, 2), "\\.", ","), "dní")
-popisek_newest <- paste("Trend po 1. dubnu – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_newest, 2), "\\.", ","), "dní")
+
+# nová trend line - poslední data
+april_2 <- nls(pocet ~ a * (1 + r)^(den),
+               data = subset(clean_data, den >= 42 & den < 52) %>% mutate(den = den - 41),
+               start = list(a = 1, r = .01)
+)
+
+# čas ve dnech pro zdvojnásobení počtu nakažených; nový trend
+double_april_2 <- log(2) / log(1 + coef(april_2)[["r"]])
+
+popisek_1 <- paste("Trend prvních dvou dekád března – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_march_12, 2), "\\.", ","), "dní")
+popisek_2 <- paste("Trend poslední březnové dekády – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_march_3, 2), "\\.", ","), "dní")
+popisek_3 <- paste("Trend první dubnové dekády – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_april_1, 2), "\\.", ","), "dní")
+popisek_4 <- paste("Trend druhé dubnové dekády – zdvojnásobení počtu nakažených 1× za", str_replace(round(double_april_2, 2), "\\.", ","), "dní")
+
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_smooth(
@@ -59,9 +71,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     x = datum, y = pocet,
     label = formatC(pocet, big.mark = " ", format = "f", digits = 0)
   ), hjust = -.5, color = "firebrick") +
-  annotate("text", label = popisek_old, x = as.Date("2020-03-12"), y = 8, hjust = 0) +
-  annotate("text", label = popisek_new, x = as.Date("2020-03-12"), y = 5.5, hjust = 0) +
-  annotate("text", label = popisek_newest, x = as.Date("2020-03-12"), y = 3.75, hjust = 0) +
+  annotate("text", label = popisek_1, x = as.Date("2020-03-12"), y = 8, hjust = 0) +
+  annotate("text", label = popisek_2, x = as.Date("2020-03-12"), y = 5.5, hjust = 0) +
+  annotate("text", label = popisek_3, x = as.Date("2020-03-12"), y = 3.75, hjust = 0) +
+  annotate("text", label = popisek_4, x = as.Date("2020-03-12"), y = 2.5, hjust = 0) +
   labs(
     title = "Trend šíření nákazy COVID-19 v ČR",
     color = "Počet nakažených",
