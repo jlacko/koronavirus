@@ -8,7 +8,7 @@ clean_data <- read_csv2("./data/raw_data.csv") %>%
 
 
 # stará trend line - do 20. 3. včetně
-march_12<- nls(pocet ~ a * (1 + r)^(den),
+march_12 <- nls(pocet ~ a * (1 + r)^(den),
   data = subset(clean_data, den < 20),
   start = list(a = 1, r = .01)
 )
@@ -82,10 +82,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
       format(format = "%d.%m.%Y"))
   ) +
   scale_x_date(
-    breaks = seq(from = as.Date("2020-03-01"), by = 1, to = as.Date("2020-04-21")),
+    date_breaks = "7 days",
     minor_breaks = NULL,
     labels = scales::date_format(format = "%d.%m."),
-    limits = as.Date(c("2020-03-02", "2020-04-20"))
+    limits = c(as.Date("2020-03-02"), max(clean_data$datum) + 5)
   ) +
   scale_y_log10(labels = scales::number_format(accuracy = 1),
                 limits = c(1, 20000)) +
