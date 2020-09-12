@@ -20,7 +20,7 @@ predpoved <- data.frame(
 
 # čas ve dnech pro zdvojnásobení
 double_trend <- log(2) / log(1 + coef(trend)[["r"]])
-popisek <- paste("Stávající trend – zdvojnásobení počtu nových případů 1× za", str_replace(round(double_trend, 2), "\\.", ","), "dní")
+popisek <- paste("Záříjový trend – zdvojnásobení počtu nových případů 1× za", str_replace(round(double_trend, 2), "\\.", ","), "dní")
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_text(
@@ -50,7 +50,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz, stav k", max(clean_data$datum) %>%
                       format(format = "%d.%m.%Y"))
   ) +
-  annotate("label", label = popisek, x = as.Date("2020-09-15"), y = 750, hjust = 0, 
+  annotate("label", label = popisek, x = as.Date("2020-09-13"), y = 250, hjust = 0, 
            fill = "white") +
   scale_x_date(
     date_breaks = "1 day",
