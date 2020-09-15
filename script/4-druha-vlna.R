@@ -50,7 +50,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz, stav k", max(clean_data$datum) %>%
                       format(format = "%d.%m.%Y"))
   ) +
-  annotate("label", label = popisek, x = as.Date("2020-09-13"), y = 250, hjust = 0, 
+  annotate("label", label = popisek, x = as.Date("2020-09-01"), y = 15000, hjust = 0, 
            fill = "white") +
   scale_x_date(
     date_breaks = "1 day",
