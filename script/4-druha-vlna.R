@@ -18,6 +18,8 @@ predpoved <- data.frame(
   pocet = predict(trend, newdata = budoucnost)
 )
 
+nejvic <- max(predpoved$pocet) # technická hodnota pro hezčí graf
+
 # čas ve dnech pro zdvojnásobení
 double_trend <- log(2) / log(1 + coef(trend)[["r"]])
 popisek <- paste("Záříjový trend – zdvojnásobení počtu nových případů 1× za", str_replace(round(double_trend, 2), "\\.", ","), "dní")
@@ -37,20 +39,20 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_point(data = predpoved, aes(
     x = datum, y = pocet), pch = 4) +
   geom_text(data = slice(clean_data, which.min(datum)), aes(
-    x = datum, y = pocet,
+    x = datum, y = pocet, 
     label = pocet
-  ), hjust = 1.3, color = "firebrick") +
+  ), hjust = 1.3, color = "firebrick", angle = -45) +
   geom_text(data = slice(clean_data, which.max(datum)), aes(
     x = datum, y = pocet,
     label = pocet
-  ), hjust = -.15, vjust = 1.25, color = "firebrick") +
+  ), hjust = -.15, vjust = 1.25, color = "firebrick", angle = -45) +
   labs(
     title = "Trend denního počtu nově diagnostikovaných případů nákazy COVID-19 za měsíc září",
     color = "Počet nakažených",
     caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz, stav k", max(clean_data$datum) %>%
                       format(format = "%d.%m.%Y"))
   ) +
-  annotate("label", label = popisek, x = as.Date("2020-09-01"), y = 15000, hjust = 0, 
+  annotate("label", label = popisek, x = as.Date("2020-09-01"), y = nejvic, hjust = 0, 
            fill = "white") +
   scale_x_date(
     date_breaks = "1 day",
@@ -59,7 +61,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     limits = as.Date(c("2020-09-01", "2020-09-31"))
   ) +
   scale_y_continuous(labels = scales::number_format(),
-                     limits = c(0, 17500)) +
+                     limits = c(0, nejvic * 8/7)) +
   theme_linedraw() +
   theme(
     axis.text.x = element_text(angle = 90),
