@@ -4,25 +4,31 @@ library(tidyverse )
 clean_data <- read_csv("./data/nakaza.csv") %>%
   filter(datum >= as.Date("2020-09-01")) %>%
   mutate(pocet = pocet_den,
-         den = lubridate::day(datum))
+         den = as.numeric(datum - as.Date("2020-08-31")))
 
 trend <- nls(pocet ~ a * (1 + r)^(den),
              data = subset(clean_data, den < lubridate::day(Sys.Date())),
              start = list(a = 1, r = .01)
 )
 
-budoucnost <- data.frame(den = lubridate::day(Sys.Date()):30)
+budoucnost <- data.frame(den = seq(lubridate::day(Sys.Date()),
+                                   length.out = 21))
 
 predpoved <- data.frame(
-  datum = c(Sys.Date():as.Date("2020-09-30")) %>% as.Date(origin = as.Date("1970-01-01")),
-  pocet = predict(trend, newdata = budoucnost)
+  datum = as.Date("2020-08-31") + budoucnost$den,
+  pocet = predict(trend, newdata = budoucnost),
+  celkem = sum(clean_data$pocet) + cumsum(predict(trend, newdata = budoucnost))
 )
 
 nejvic <- max(predpoved$pocet) # technická hodnota pro hezčí graf
 
 # čas ve dnech pro zdvojnásobení
 double_trend <- log(2) / log(1 + coef(trend)[["r"]])
-popisek <- paste("Záříjový trend – zdvojnásobení počtu nových případů 1× za", str_replace(round(double_trend, 2), "\\.", ","), "dní")
+popisek <- paste("Záříjový trend – zdvojnásobení počtu nových případů 1× za", 
+                 str_replace(round(double_trend, 2), "\\.", ","), "dní",
+                 "\ndosažení součtu 80 tisíc nově nakažených kolem",
+                 gsub("0", "", strftime(predpoved$datum[min(which(predpoved$celkem>80e3))], "%d.")),
+                 strftime(predpoved$datum[min(which(predpoved$celkem>80e3))], "%m. %Y"))
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_text(
@@ -47,7 +53,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     label = pocet
   ), hjust = -.15, vjust = 1.25, color = "firebrick", angle = -45) +
   labs(
-    title = "Trend denního počtu nově diagnostikovaných případů nákazy COVID-19 za měsíc září",
+    title = "Trend denního počtu nově diagnostikovaných případů nákazy COVID-19 od 1. září",
     color = "Počet nakažených",
     caption = paste("zdroj dat: https://onemocneni-aktualne.mzcr.cz, stav k", max(clean_data$datum) %>%
                       format(format = "%d.%m.%Y"))
@@ -58,7 +64,7 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     date_breaks = "1 day",
     minor_breaks = NULL,
     labels = scales::date_format(format = "%d.%m."),
-    limits = as.Date(c("2020-09-01", "2020-09-31"))
+    limits = as.Date(c(min(clean_data$datum), min(clean_data$datum) + max(budoucnost$den)))
   ) +
   scale_y_continuous(labels = scales::number_format(),
                      limits = c(0, nejvic * 8/7)) +
