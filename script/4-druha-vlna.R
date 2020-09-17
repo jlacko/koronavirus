@@ -26,9 +26,8 @@ nejvic <- max(predpoved$pocet) # technická hodnota pro hezčí graf
 double_trend <- log(2) / log(1 + coef(trend)[["r"]])
 popisek <- paste("Záříjový trend – zdvojnásobení počtu nových případů 1× za", 
                  str_replace(round(double_trend, 2), "\\.", ","), "dní",
-                 "\ndosažení součtu 80 tisíc nově nakažených kolem",
-                 gsub("0", "", strftime(predpoved$datum[min(which(predpoved$celkem>80e3))], "%d.")),
-                 strftime(predpoved$datum[min(which(predpoved$celkem>80e3))], "%m. %Y"))
+                 "\ndosažení součtu 80 tisíc nově nakažených – kolem",
+                 gsub("^0", "", strftime(predpoved$datum[min(which(predpoved$celkem>=80e3))], "%d. %m. %Y")))
 
 ggplot(data = clean_data, aes(x = datum, y = pocet)) +
   geom_text(
