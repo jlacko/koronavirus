@@ -85,10 +85,10 @@ ggplot(data = clean_data, aes(x = datum, y = pocet)) +
     date_breaks = "7 days",
     minor_breaks = NULL,
     labels = scales::date_format(format = "%d.%m."),
-    limits = c(as.Date("2020-03-02"), max(clean_data$datum) + 5)
+    limits = c(as.Date("2020-03-02"), max(clean_data$datum) + 14)
   ) +
   scale_y_log10(labels = scales::number_format(accuracy = 1),
-                limits = c(1, 20000)) +
+                limits = c(1, max(clean_data$pocet))) +
   scale_color_identity(
     labels = c("skutečnost", "zobecnění trendu"),
     guide = guide_legend(
